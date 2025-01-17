@@ -14,10 +14,10 @@
             <div name="purchase_setting_container" position="inside">
                 <div
                     class="col-12 col-lg-6 o_setting_box"
-                    id="create_activity_repeating_orders"
+                    id="allow_create_activity_repeating_orders"
                 >
                     <div class="o_setting_left_pane">
-                        <field name="create_activity_repeating_orders" />
+                        <field name="allow_create_activity_repeating_orders" />
                     </div>
                     <div class="o_setting_right_pane">
                         <span
@@ -25,7 +25,7 @@
                         >Create Activity for Repeating Orders</span>
                         <div
                             class="content-group"
-                            attrs="{'invisible': [('create_activity_repeating_orders', '=', False)]}"
+                            attrs="{'invisible': [('allow_create_activity_repeating_orders', '=', False)]}"
                         >
                             <div class="row mt16">
                                 <label

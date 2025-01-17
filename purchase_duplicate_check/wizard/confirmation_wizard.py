@@ -24,19 +24,26 @@ class ConfirmationWizard(models.TransientModel):
 
     def _create_po_activity(self, activity_type_id):
         res_ids = literal_eval(self.res_ids) if self.res_ids else []
+        message = self.message
+
         records = self.env[self.res_model].browse(res_ids)
         model_id = self.env["ir.model"]._get_id(records._name)
         activity_type = self.env["mail.activity.type"].browse(activity_type_id)
+        user_id = activity_type.default_user_id.id or self.env.user.id
+        activity_type_id = activity_type.id
+        activity_vals_list = []
         for record in records:
-            self.env["mail.activity"].create(
+            activity_vals_list.append(
                 {
-                    "user_id": activity_type.default_user_id.id or self.env.user.id,
-                    "activity_type_id": activity_type.id,
+                    "user_id": user_id,
+                    "activity_type_id": activity_type_id,
                     "res_id": record.id,
                     "res_model_id": model_id,
-                    "note": self.message,
+                    "note": message,
                 }
             )
+        if activity_vals_list:
+            self.env["mail.activity"].create(activity_vals_list)
 
     def action_confirm(self):
         action_type_id = (

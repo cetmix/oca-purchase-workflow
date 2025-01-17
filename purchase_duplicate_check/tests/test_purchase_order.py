@@ -21,7 +21,7 @@ class TestPurchaseOrder(TransactionCase):
 
         self.activity_type_email = self.env.ref("mail.mail_activity_data_email")
         self.env["ir.config_parameter"].sudo().set_param(
-            "purchase_duplicate_check.create_activity_repeating_orders", True
+            "purchase_duplicate_check.allow_create_activity_repeating_orders", True
         )
         self.env["ir.config_parameter"].sudo().set_param(
             "purchase_duplicate_check.repeating_orders_activity_type_id",
