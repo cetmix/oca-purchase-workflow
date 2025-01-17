@@ -11,25 +11,53 @@ class PurchaseOrderLine(models.Model):
     )
 
     def _compute_pending_order_ids(self):
-        purchase_order_obj = self.env["purchase.order"]
-        for rec in self:
-            if rec.product_type != "product":
-                rec.pending_order_ids = False
-                continue
-            rfq_orders = purchase_order_obj.search(
-                [
-                    ("order_line.product_id", "=", rec.product_id.id),
-                    ("id", "!=", rec.order_id._origin.id),
-                    "|",
-                    ("state", "in", ["draft", "sent"]),
-                    "&",
-                    "&",
-                    ("state", "not in", ["draft", "sent"]),
-                    ("picking_ids.picking_type_id.code", "=", "incoming"),
-                    ("picking_ids.state", "not in", ["done", "cancel"]),
-                ]
-            )
-            rec.pending_order_ids = rfq_orders
+        product_lines = self.filtered(lambda rec: rec.product_type == "product")
+        other_lines = self - product_lines
+
+        if other_lines:
+            other_lines.pending_order_ids = False
+
+        if not product_lines:
+            return
+
+        product_ids = tuple(product_lines.mapped("product_id.id"))
+        order_ids = tuple(product_lines.mapped("order_id.id"))
+
+        if not product_ids:
+            product_lines.pending_order_ids = False
+            return
+        query = """
+                SELECT po.id, pol.product_id
+                FROM purchase_order po
+                JOIN purchase_order_line pol ON pol.order_id = po.id
+                LEFT JOIN stock_move sm ON sm.purchase_line_id = pol.id
+                LEFT JOIN stock_picking sp ON sp.id = sm.picking_id
+
+                WHERE pol.product_id IN %s
+                    AND po.id NOT IN %s
+                    AND (
+                      po.state IN ('draft', 'sent')
+                      OR (
+                          po.state NOT IN ('draft', 'sent')
+                          AND sp.picking_type_id IN (
+                              SELECT id FROM stock_picking_type WHERE code = 'incoming'
+                          )
+                          AND sp.state NOT IN ('done', 'cancel')
+                      )
+                  )
+            """
+        self.env.cr.execute(query, (product_ids, order_ids))
+        result = self.env.cr.fetchall()
+        product_orders_map = {}
+        for order_id, product_id in result:
+            if product_id not in product_orders_map:
+                product_orders_map[product_id] = []
+            product_orders_map[product_id].append(order_id)
+
+        for rec in product_lines:
+            rec.pending_order_ids = [
+                (6, 0, product_orders_map.get(rec.product_id.id, []))
+            ]
 
     def _get_order_confirm_message(self):
         """Get order confirmation message for pending orders"""
