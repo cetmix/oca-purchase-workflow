@@ -7,15 +7,12 @@
     "license": "AGPL-3",
     "category": "Inventory/Purchase",
     "website": "https://github.com/OCA/purchase-workflow",
-    "live_test_url": "https://demo.cetmix.com",
     "depends": ["purchase_stock", "confirmation_wizard"],
-    "external_dependencies": {},
     "data": [
         "views/purchase_order_views.xml",
         "views/res_config_settings_views.xml",
         "wizard/confirmation_wizard_views.xml",
     ],
-    "assets": {},
     "installable": True,
     "application": False,
 }

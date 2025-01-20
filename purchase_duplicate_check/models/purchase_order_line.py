@@ -20,9 +20,8 @@ class PurchaseOrderLine(models.Model):
         if not product_lines:
             return
 
-        product_ids = tuple(product_lines.mapped("product_id.id"))
-        order_ids = tuple(product_lines.mapped("order_id.id"))
-
+        product_ids = tuple(product_lines.mapped("product_id")._origin.ids)
+        order_ids = tuple(product_lines.mapped("order_id")._origin.ids)
         if not product_ids:
             product_lines.pending_order_ids = False
             return

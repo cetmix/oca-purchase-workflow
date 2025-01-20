@@ -12,9 +12,7 @@ class PurchaseOrder(models.Model):
         :return str: message
         """
         message_parts = []
-        order_lines = self.env["purchase.order.line"].search(
-            [("product_id", "=", product_id), ("order_id", "in", self.ids)]
-        )
+        order_lines = self.order_line.filtered(lambda l: l.product_id.id == product_id)
         for line in order_lines:
             order = line.order_id
             order_href = (
