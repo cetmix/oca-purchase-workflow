@@ -1,4 +1,3 @@
-from odoo.fields import Date
 from odoo.tests import Form, TransactionCase
 
 
@@ -43,7 +42,7 @@ class TestPurchaseOrder(TransactionCase):
         """Test flow where prepare message for purchase order"""
         message = self.order1._prepare_pending_orders_message(self.product_2.id)
         self.assertFalse(message, "Message must be empty")
-        expected_message = f"RFQ: <a href='/web#id={self.order1.id}&model=purchase.order'>{self.order1.name}</a> date: {Date.today()} Qty: 10.0<br/>"  # noqa
+        expected_message = f"RFQ: <a href='/web#id={self.order1.id}&model=purchase.order'>{self.order1.name}</a> date: {self.order1.create_date.date()} Qty: 10.0<br/>"  # noqa
         message = self.order1._prepare_pending_orders_message(self.product_1.id)
         self.assertEqual(message, expected_message, "Messages must be the same")
 
