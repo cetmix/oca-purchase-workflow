@@ -9,7 +9,7 @@
     "summary": "Select the default currency for purchases",
     "author": "Cetmix, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/purchase-workflow",
-    "depends": ["purchase"],
+    "depends": ["purchase", "sale", "stock"],
     "data": [
         "views/res_config_settings_views.xml",
     ],
