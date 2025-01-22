@@ -20,12 +20,12 @@ class PurchaseOrder(models.Model):
             )
             type_ = order.state in ["draft", "sent"] and "RFQ" or "PO"
             message_parts.append(
-                f"{type_}: {order_href} date: {order.create_date.date()} Qty: {line.product_qty}<br/>"  # noqa
+                f"{type_}: {order_href}; date: {order.create_date.date()}; Qty: {line.product_qty};<br/>"  # noqa
             )
         return "".join(message_parts)
 
     def _is_activity_enabled(self) -> bool:
-        """Check if activity for repeating orders is enabled"""
+        """Check if activity for duplicated orders is enabled"""
         return (
             self.env["ir.config_parameter"]
             .sudo()
