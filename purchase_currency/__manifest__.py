@@ -4,7 +4,7 @@
 {
     "name": "Purchase Currency",
     "version": "16.0.1.0.0",
-    "category": "Purchases",
+    "category": "Purchase",
     "license": "AGPL-3",
     "summary": "Select the default currency for purchases",
     "author": "Cetmix, Odoo Community Association (OCA)",

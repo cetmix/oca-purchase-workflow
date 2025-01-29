@@ -28,7 +28,7 @@ Purchase Currency
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
 
-Set default currency for the company purchase orders and vendor bills.
+Set default currency for the company purchase orders.
 
 **Table of contents**
 
@@ -38,14 +38,16 @@ Set default currency for the company purchase orders and vendor bills.
 Use Cases / Context
 ===================
 
-This module is useful when a company is operating in muli-currency environment and most of purchases are made in currency other that the main currency set in the company settings.
+This module is useful when a company operates in a muli-currency
+environment and most of the purchases are made in a currency other than
+that the main currency of the company.
 
 Configuration
 =============
 
 Go to the Settings -> Purchase:
 
-- Select a currency avaibale for the company in the "Default Purchase Currency" field
+- Set "Default Purchase Currency" with an available currency
 - Press the "Save" button to apply changes
 
 Usage
